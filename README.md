@@ -8,7 +8,7 @@ USB MIDI controller for `Arduino MEGA 2560`.
 - It has two selectable modes: **CC MODE** and **NOTE MODE**. So depending on the mode selected can send MIDI control changes or MIDI notes.
 - It has 4 dedicated buttons to edit the device options, and 28 buttons to send MIDI. This 28 MIDI butttons can be set to send *CC data* or *MIDI notes* depending on the mode of the device.
 - The **default channel** is 16. It can be edited, so it can be set any of the 16 MIDI channels, from 1 to 16.
-- The **default note range** is from MIDI note 36 to MIDI note 63 (4 octaves). This can be edited in steps of 12 semitones up or down. The transposition can be set from -3 to +3 octaves.
+- The **default note range** is from MIDI note 48 to MIDI note 75 (from C2 to Eb4). This can be edited in steps of 12 semitones up or down. The transposition can be set from -3 to +3 octaves.
 - The **control changes** are assigned into the 28 buttons from CC0 to CC27.
 - It has a built in display with information about the mode, the channel and the transposition.
 
@@ -26,7 +26,7 @@ The menu of the device has 4 dedicated buttons. The actions for this buttons are
 It has 28 buttons dedicated to MIDI. This buttons can send *CC data* or *MIDI notes* depending on the current mode of the device.
 
 - In **CC MODE** the buttons send MIDI control changes from CC0 to CC27.
-- In **NOTE MODE** the buttons send MIDI notes from MIDI note 36 to MIDI note 63 (4 octaves). This can be transposed up or down in 12 semitones steps (octaves).
+- In **NOTE MODE** the buttons send MIDI notes from MIDI note 48 to MIDI note 75 (from C2 to Eb4). This can be transposed up or down in 12 semitones steps (octaves).
 
 ![Screenshot](Art/miminu_controller_keyboard.png)
 
