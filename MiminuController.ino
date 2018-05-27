@@ -9,7 +9,7 @@ MIDI_CREATE_DEFAULT_INSTANCE();
 
 const uint8_t MIN_MIDI_VALUE = 0;
 const uint8_t MAX_MIDI_VALUE = 127;
-const uint8_t MIDI_NOTE_START = 36;
+const uint8_t MIDI_NOTE_START = 48;
 const uint8_t NUM_BUTTONS = 32;
 const uint8_t MENU_BUTTONS = 4;
 const uint8_t ARDUINO_MEGA_NO_VALID_DIGITAL_PINS[] = {0, 1, 14, 15, 16, 17, 18, 19, 20, 21};
