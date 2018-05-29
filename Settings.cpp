@@ -1,4 +1,3 @@
-#include <EEPROM.h>
 #include "Settings.h"
 
 const uint8_t MIN_CHANNEL_VALUE = 0;

@@ -2,6 +2,7 @@
 #define Settings_h
 
 #include <Arduino.h>
+#include <EEPROM.h>
 
 class Settings {
   public:
