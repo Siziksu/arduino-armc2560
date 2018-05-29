@@ -1,7 +1,12 @@
 #include <EEPROM.h>
 #include "Settings.h"
 
-int address = 0;
+const uint8_t MIN_CHANNEL_VALUE = 0;
+const uint8_t MAX_CHANNEL_VALUE = 16;
+const int8_t MIN_TRANSPOSITION_VALUE = -3;
+const int8_t MAX_TRANSPOSITION_VALUE = 3;
+
+int eepromAddress = 0;
 
 struct Memory {
   boolean isModeCc;
@@ -13,7 +18,7 @@ Settings::Settings() {}
 
 void Settings::setup() {
   Memory memory;
-  EEPROM.get(address, memory);
+  EEPROM.get(eepromAddress, memory);
   _isModeCc = memory.isModeCc;
   _channel = memory.channel;
   _octave = memory.octave;
@@ -41,17 +46,17 @@ void Settings::toogleMode() {
 
 void Settings::up() {
   if (_isModeCc) {
-    _channel = _channel <= 15 ? _channel + 1 : _channel;
+    _channel = _channel < MAX_CHANNEL_VALUE ? _channel + 1 : _channel;
   } else {
-    _octave = _octave <= 2 ? _octave + 1 : _octave;
+    _octave = _octave < MAX_TRANSPOSITION_VALUE ? _octave + 1 : _octave;
   }
 }
 
 void Settings::down() {
   if (_isModeCc) {
-    _channel = _channel >= 2 ? _channel - 1 : _channel;
+    _channel = _channel > MIN_CHANNEL_VALUE ? _channel - 1 : _channel;
   } else {
-    _octave = _octave >= -2 ? _octave - 1 : _octave;
+    _octave = _octave > MIN_TRANSPOSITION_VALUE ? _octave - 1 : _octave;
   }
 }
 
@@ -61,6 +66,5 @@ void Settings::save() {
     _channel,
     _octave
   };
-  EEPROM.put(address, memory);
+  EEPROM.put(eepromAddress, memory);
 }
-

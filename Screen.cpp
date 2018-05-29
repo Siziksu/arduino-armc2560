@@ -1,19 +1,17 @@
 #include "Screen.h"
-#include <SPI.h>
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
 
 #define OLED_RESET 4
+
 Adafruit_SSD1306 display(OLED_RESET);
 
 Screen::Screen() {}
 
-void Screen::setup() {
+void Screen::setup(Settings *settings) {
+  _settings = settings;
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   showLogo();
 }
-    
+
 void Screen::clearScreen() {
   display.clearDisplay();
   display.display();
@@ -29,54 +27,40 @@ void Screen::showLogo() {
   display.println("      CONTROLLER");
   display.println("         1.0");
   display.display();
+  delay(1500);
 }
 
-void Screen::showMode(Settings settings) {
-  if (settings.isModeCc()) {
-    showCcMode(settings.channel());
+void Screen::showMode() {
+  if (_settings->isModeCc()) {
+    showCcMode(_settings->channel());
   } else {
-    showNoteMode(settings.octave());
+    showNoteMode(_settings->octave());
   }
 }
 
-void Screen::showSettingsSaved(Settings settings) {
-  showSettingsSaved();
+void Screen::showSettingsSaved() {
+  showMessage("SETTINGS", 2, "SAVED", 1);
   delay(1500);
-  showMode(settings);
+  showMode();
 }
 
 void Screen::showCcMode(uint8_t channel) {
-  display.clearDisplay();
-  display.setTextSize(2);
-  display.setTextColor(WHITE);
-  display.setCursor(0, 5);
-  display.println("CC MODE");
-  display.setTextSize(1);
-  display.print("CHANNEL: ");
-  display.println(channel);
-  display.display();
+  String prefix = "CHANNEL: ";
+  showMessage("CC MODE", 2, (channel == 0 ? prefix += "OMNI" : prefix += channel), 1);
 }
 
 void Screen::showNoteMode(int8_t octave) {
-  display.clearDisplay();
-  display.setTextSize(2);
-  display.setTextColor(WHITE);
-  display.setCursor(0, 5);
-  display.println("NOTE MODE");
-  display.setTextSize(1);
-  display.print("TRANSPOSE: ");
-  display.println(octave);
-  display.display();
+  String prefix = "TRANSPOSE: ";
+  showMessage("NOTE MODE", 2, prefix + octave, 1);
 }
 
-void Screen::showSettingsSaved() {
+void Screen::showMessage(String line1, int8_t size1, String line2, int8_t size2) {
   display.clearDisplay();
-  display.setTextSize(2);
-  display.setTextColor(WHITE);
   display.setCursor(0, 5);
-  display.println("SETTINGS");
-  display.setTextSize(1);
-  display.println("SAVED");
+  display.setTextColor(WHITE);
+  display.setTextSize(size1);
+  display.println(line1);
+  display.setTextSize(size2);
+  display.println(line2);
   display.display();
 }
-
