@@ -40,10 +40,8 @@ void MidiKeyboard::midiButton(uint8_t index) {
     case 1:
       _led->on();
       if (_settings->isModeCc()) {
-        Serial.println(getControlChangeValue(index));
         MIDI.sendControlChange(getControlChangeValue(index), MAX_MIDI_VALUE, _settings->channel());
       } else {
-        Serial.println(getNoteValue(index));
         MIDI.sendNoteOn(getNoteValue(index), MAX_MIDI_VALUE, _settings->channel());
       }
       break;

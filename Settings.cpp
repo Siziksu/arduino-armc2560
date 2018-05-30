@@ -1,6 +1,6 @@
 #include "Settings.h"
 
-const uint8_t MIN_CHANNEL_VALUE = 0;
+const uint8_t MIN_CHANNEL_VALUE = 1;
 const uint8_t MAX_CHANNEL_VALUE = 16;
 const int8_t MIN_TRANSPOSITION_VALUE = -3;
 const int8_t MAX_TRANSPOSITION_VALUE = 3;
