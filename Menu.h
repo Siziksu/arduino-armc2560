@@ -16,6 +16,5 @@ class Menu {
     Settings *_settings;
     Led *_led;
     Screen _screen;
-    void menuButton(uint8_t index);
 };
 #endif

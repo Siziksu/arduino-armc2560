@@ -39,7 +39,7 @@ void MidiKeyboard::midiButton(uint8_t index) {
   switch (buttonsState[index]) {
     case 1:
       _led->on();
-      if (_settings->isModeCc()) {
+      if (_settings->isInModeCc()) {
         MIDI.sendControlChange(getControlChangeValue(index), MAX_MIDI_VALUE, _settings->channel());
       } else {
         MIDI.sendNoteOn(getNoteValue(index), MAX_MIDI_VALUE, _settings->channel());
@@ -47,7 +47,7 @@ void MidiKeyboard::midiButton(uint8_t index) {
       break;
     case 2:
       _led->off(); 
-      if (_settings->isModeCc()) {
+      if (_settings->isInModeCc()) {
         MIDI.sendControlChange(getControlChangeValue(index), MIN_MIDI_VALUE, _settings->channel());
       } else {
         MIDI.sendNoteOff(getNoteValue(index), MAX_MIDI_VALUE, _settings->channel());

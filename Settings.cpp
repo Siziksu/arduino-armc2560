@@ -8,23 +8,80 @@ const int8_t MAX_TRANSPOSITION_VALUE = 3;
 int eepromAddress = 0;
 
 struct Memory {
-  boolean isModeCc;
+  boolean modeCc;
   uint8_t channel;
   int8_t octave;
 };
 
 Settings::Settings() {}
 
+void Settings::toogleEditMode() {
+  _editMode = !_editMode;
+}
+
 void Settings::setup() {
   Memory memory;
   EEPROM.get(eepromAddress, memory);
-  _isModeCc = memory.isModeCc;
+  _modeCc = memory.modeCc;
   _channel = memory.channel;
   _octave = memory.octave;
 }
 
-boolean Settings::isModeCc() {
-  return _isModeCc;
+void Settings::up() {
+  if (!_editMode) {
+    _menuOption = _menuOption > 1 ? _menuOption - 1 : _menuOption;
+  } else {
+    switch(_menuOption) {
+      case 1:
+        _modeCc = !_modeCc;
+        break;
+      case 2:
+        _channel = _channel < 16 ? _channel + 1 : _channel;
+        break;
+      case 3:
+        _octave = _octave < 3 ? _octave + 1 : _octave;
+        break;
+    }
+  }
+}
+
+void Settings::down() {
+  if (!_editMode) {
+    _menuOption = _menuOption < 3 ? _menuOption + 1 : _menuOption;
+  } else {
+    switch(_menuOption) {
+      case 1:
+        _modeCc = !_modeCc;
+        break;
+      case 2:
+        _channel = _channel > 1 ? _channel - 1 : _channel;
+        break;
+      case 3:
+        _octave = _octave > -3 ? _octave - 1 : _octave;
+        break;
+    }
+  }
+}
+
+void Settings::save() {
+  Memory memory = {
+    _modeCc,
+    _channel,
+    _octave
+  };
+  EEPROM.put(eepromAddress, memory);
+}
+
+boolean Settings::isInEditMode() {
+  return _editMode;
+}
+
+uint8_t Settings::menuOption() {
+  return _menuOption;
+}
+
+boolean Settings::isInModeCc() {
+  return _modeCc;
 }
 
 uint8_t Settings::channel() {
@@ -37,33 +94,4 @@ int8_t Settings::octave() {
 
 int8_t Settings::transpose() {
   return _octave * 12;
-}
-
-void Settings::toogleMode() {
-  _isModeCc = !_isModeCc;
-}
-
-void Settings::up() {
-  if (_isModeCc) {
-    _channel = _channel < MAX_CHANNEL_VALUE ? _channel + 1 : _channel;
-  } else {
-    _octave = _octave < MAX_TRANSPOSITION_VALUE ? _octave + 1 : _octave;
-  }
-}
-
-void Settings::down() {
-  if (_isModeCc) {
-    _channel = _channel > MIN_CHANNEL_VALUE ? _channel - 1 : _channel;
-  } else {
-    _octave = _octave > MIN_TRANSPOSITION_VALUE ? _octave - 1 : _octave;
-  }
-}
-
-void Settings::save() {
-  Memory memory = {
-    _isModeCc,
-    _channel,
-    _octave
-  };
-  EEPROM.put(eepromAddress, memory);
 }

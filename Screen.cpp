@@ -4,6 +4,10 @@
 
 Adafruit_SSD1306 display(OLED_RESET);
 
+const uint8_t LINE_HEIGHT = 8;
+const uint8_t CHAR_WIDTH = 6;
+const uint8_t CHAR_HALF_WIDTH = 3;
+
 Screen::Screen() {}
 
 void Screen::setup(Settings *settings) {
@@ -19,48 +23,77 @@ void Screen::clearScreen() {
 
 void Screen::showLogo() {
   display.clearDisplay();
-  display.drawRect(0, 0, 128,32, WHITE);
   display.setTextSize(1);
   display.setTextColor(WHITE);
-  display.setCursor(0, 5);
-  display.println("        MIMINU");
-  display.println("      CONTROLLER");
-  display.println("         1.0");
+  display.setCursor(CHAR_WIDTH * 8, LINE_HEIGHT * 1);
+  display.print("MIMINU");
+  display.setCursor(CHAR_WIDTH * 6, LINE_HEIGHT * 2);
+  display.print("CONTROLLER");
+  display.setCursor(CHAR_WIDTH * 9 + CHAR_HALF_WIDTH, LINE_HEIGHT * 3);
+  display.print("1.0");
   display.display();
   delay(1500);
+  drawMenu();
 }
 
-void Screen::showMode() {
-  if (_settings->isModeCc()) {
-    showCcMode(_settings->channel());
-  } else {
-    showNoteMode(_settings->octave());
+void Screen::drawMenu() {
+  updateMenu();
+}
+
+void Screen::updateMenu() {
+  display.clearDisplay();
+  
+  display.setTextSize(1);
+  
+  display.setTextColor(WHITE);
+  display.setCursor(CHAR_WIDTH * 4, LINE_HEIGHT * 1);
+  display.print("MODE     :");
+  if (_settings->isInEditMode() && _settings->menuOption() == 1) {
+    display.setTextColor(BLACK, WHITE);
   }
+  display.print(" ");
+  display.print(_settings->isInModeCc() ? "CC" : "NOTE");
+  display.print(" ");
+  
+  display.setTextColor(WHITE);
+  display.setCursor(CHAR_WIDTH * 4, LINE_HEIGHT * 2);
+  display.print("CHANNEL  :");
+  if (_settings->isInEditMode() && _settings->menuOption() == 2) {
+    display.setTextColor(BLACK, WHITE);
+  }
+  display.print(" ");
+  display.print(_settings->channel());
+  display.print(" ");
+  
+  display.setTextColor(WHITE);
+  display.setCursor(CHAR_WIDTH * 4, LINE_HEIGHT * 3);
+  display.print("TRANSPOSE:");
+  if (_settings->isInEditMode() && _settings->menuOption() == 3) {
+    display.setTextColor(BLACK, WHITE);
+  }
+  display.print(" ");
+  if (_settings->octave() > 0) {
+    display.print("+");
+  }
+  display.print(_settings->octave());
+  display.print(" ");
+
+  display.setTextColor(WHITE);
+  display.setCursor(CHAR_WIDTH * 2, LINE_HEIGHT * _settings->menuOption());
+  display.write(175);
+
+  display.display();
 }
 
 void Screen::showSettingsSaved() {
-  showMessage("SETTINGS", 2, "SAVED", 1);
-  delay(1500);
-  showMode();
-}
-
-void Screen::showCcMode(uint8_t channel) {
-  String prefix = "CHANNEL: ";
-  showMessage("CC MODE", 2, (channel == 0 ? prefix += "OMNI" : prefix += channel), 1);
-}
-
-void Screen::showNoteMode(int8_t octave) {
-  String prefix = "TRANSPOSE: ";
-  showMessage("NOTE MODE", 2, prefix + octave, 1);
-}
-
-void Screen::showMessage(String line1, int8_t size1, String line2, int8_t size2) {
   display.clearDisplay();
-  display.setCursor(0, 5);
   display.setTextColor(WHITE);
-  display.setTextSize(size1);
-  display.println(line1);
-  display.setTextSize(size2);
-  display.println(line2);
+  display.setTextSize(1);
+  display.setCursor(CHAR_WIDTH * 7, LINE_HEIGHT * 2);
+  display.print("SETTINGS");
+  display.setCursor(CHAR_WIDTH * 8 + CHAR_HALF_WIDTH, LINE_HEIGHT * 3);
+  display.print("SAVED");
   display.display();
+  delay(1500);
+  drawMenu();
 }

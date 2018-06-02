@@ -15,7 +15,6 @@ void Menu::setup(Settings *settings, Led *led) {
     menuButtons[i] = new Button(MENU_PINS[i], 5);
   }
   _screen.setup(_settings);
-  _screen.showMode();
 }
 
 void Menu::loop() {
@@ -23,32 +22,28 @@ void Menu::loop() {
     menuButtonsState[i] = menuButtons[i]->state();
   }
   for (uint8_t i = 0; i < NUM_MENU_BUTTONS; i++) {
-    menuButton(i);
-  }
-}
-
-void Menu::menuButton(uint8_t index) {
-  switch (menuButtonsState[index]) {
-    case 1:
-      _led->on();
-      break;
-    case 2:
-      _led->off();
-      if (menuButtons[index]->pin() == 2) {
-        _settings->toogleMode();
-        _screen.showMode();
-      } else if (menuButtons[index]->pin() == 3) {
-        _settings->up();
-        _screen.showMode();
-      } else if (menuButtons[index]->pin() == 4) {
-        _settings->down();
-        _screen.showMode();
-      } else if (menuButtons[index]->pin() == 5) {
-        _settings->save();
-        _screen.showSettingsSaved();
-      }
-      break;
-    default:
-      break;
+    switch (menuButtonsState[i]) {
+      case 1:
+        _led->on();
+        break;
+      case 2:
+        _led->off();
+        if (menuButtons[i]->pin() == 2) {
+          _settings->toogleEditMode();
+          _screen.updateMenu();
+        } else if (menuButtons[i]->pin() == 3) {
+          _settings->up();
+          _screen.updateMenu();
+        } else if (menuButtons[i]->pin() == 4) {
+          _settings->down();
+          _screen.updateMenu();
+        } else if (menuButtons[i]->pin() == 5) {
+          _settings->save();
+          _screen.showSettingsSaved();
+        }
+        break;
+      default:
+        break;
+    }
   }
 }
