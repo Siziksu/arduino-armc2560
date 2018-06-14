@@ -25,25 +25,54 @@ void Menu::loop() {
     switch (menuButtonsState[i]) {
       case 1:
         _led->on();
+        if (menuButtons[i]->pin() == 2) {
+          edit();
+        } else if (menuButtons[i]->pin() == 3) {
+          up();
+        } else if (menuButtons[i]->pin() == 4) {
+          down();
+        } else if (menuButtons[i]->pin() == 5) {
+          save();
+        }
         break;
       case 2:
         _led->off();
-        if (menuButtons[i]->pin() == 2) {
-          _settings->toogleEditMode();
-          _screen.updateMenu();
-        } else if (menuButtons[i]->pin() == 3) {
-          _settings->up();
-          _screen.updateMenu();
-        } else if (menuButtons[i]->pin() == 4) {
-          _settings->down();
-          _screen.updateMenu();
-        } else if (menuButtons[i]->pin() == 5) {
-          _settings->save();
-          _screen.showSettingsSaved();
-        }
         break;
       default:
         break;
     }
   }
 }
+
+void Menu::edit() {
+  _settings->toogleEditMode();
+  _screen.updateMenu();  
+}
+
+void Menu::up() {
+  _settings->up();
+  _screen.updateMenu();
+}
+
+void Menu::down() {
+  _settings->down();
+  _screen.updateMenu();
+}
+
+void Menu::save() {
+  _settings->save();
+  _screen.showSettingsSaved();
+}
+
+void Menu::command(char* string) {
+  if (strcmp(string, "Save ON") == 0) {
+    save();
+  } else if (strcmp(string, "Edit ON") == 0) {
+    edit();
+  } else if (strcmp(string, "Up ON") == 0) {
+    up();
+  } else if (strcmp(string, "Down ON") == 0) {
+    down();
+  }
+}
+

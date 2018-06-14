@@ -11,6 +11,11 @@ class Menu {
     Menu();
     void setup(Settings *settings, Led *led);
     void loop();
+    void edit();
+    void up();
+    void down();
+    void save();
+    void command(char* string);
     
   private:
     Settings *_settings;
@@ -18,3 +23,4 @@ class Menu {
     Screen _screen;
 };
 #endif
+

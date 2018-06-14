@@ -22,3 +22,4 @@ class Screen {
     Settings *_settings;
 };
 #endif
+

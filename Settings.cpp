@@ -95,3 +95,4 @@ int8_t Settings::octave() {
 int8_t Settings::transpose() {
   return _octave * 12;
 }
+
