@@ -18,7 +18,6 @@ uint8_t lastAssignedPin = 0;
 boolean bluetoothCommandState;
 uint8_t bluetoothCommandIndex;
 uint8_t bluetoothCommandValue;
-boolean bluettothCommandValid;
 
 MidiKeyboard::MidiKeyboard() {}
 
@@ -96,11 +95,6 @@ void MidiKeyboard::manageCommand(byte* command) {
   bluetoothCommandIndex = command[0];
   bluetoothCommandValue = command[1];
   if (bluetoothCommandIndex >= 0 && bluetoothCommandIndex <=127 && bluetoothCommandValue >= 0 && bluetoothCommandValue <=127) {
-    bluettothCommandValid = true;
-  } else {
-    bluettothCommandValid = false;
-  }
-  if (bluettothCommandValid) {
     if (_settings->isInModeCc()) {
       MIDI.sendControlChange(getControlChangeValue(bluetoothCommandIndex), bluetoothCommandValue, _settings->channel());
     } else {
