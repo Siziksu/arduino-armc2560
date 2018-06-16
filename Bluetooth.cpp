@@ -3,10 +3,13 @@
 
 #define BT_RX 10
 #define BT_TX 11
+
 SoftwareSerial serialBluetooth(BT_RX, BT_TX);
+
 const byte PACKET_SIZE = 2;
 const byte START_PACKET_BYTE = 254;
 const byte END_PACKET_BYTE = 255;
+
 bool received = false;
 bool receiving = false;
 byte result[PACKET_SIZE];

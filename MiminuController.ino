@@ -1,4 +1,3 @@
-#include <SoftwareSerial.h>
 #include <Commons.h>
 #include "Menu.h"
 #include "MidiKeyboard.h"
