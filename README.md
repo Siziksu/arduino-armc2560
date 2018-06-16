@@ -28,7 +28,11 @@ It has 28 buttons dedicated to MIDI. This buttons can send *CC data* or *MIDI no
 - In **CC MODE** the buttons send MIDI control changes from CC0 to CC27.
 - In **NOTE MODE** the buttons send MIDI notes from MIDI note 48 to MIDI note 75 (from C2 to Eb4). This can be transposed up or down in 12 semitones steps (octaves).
 
-![Screenshot](Art/miminu_controller_keyboard.png)
+### Keyboard
+![Screenshot](_art/miminu_controller.png)
+
+### Reaper mapping
+![Screenshot](_art/miminu_controller_reaper_mapping.png)
 
 ## License
     Copyright 2018 Esteban Latre
