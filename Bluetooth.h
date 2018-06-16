@@ -8,10 +8,9 @@ class Bluetooth {
     Bluetooth();
     void setup();
     void loop();
-    boolean isReceived();
-    char* getData();
+    bool isReceived();
+    byte* getData();
     
   private:
 };
 #endif
-

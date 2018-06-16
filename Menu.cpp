@@ -64,15 +64,17 @@ void Menu::save() {
   _screen.showSettingsSaved();
 }
 
-void Menu::command(char* string) {
-  if (strcmp(string, "Save ON") == 0) {
-    save();
-  } else if (strcmp(string, "Edit ON") == 0) {
-    edit();
-  } else if (strcmp(string, "Up ON") == 0) {
-    up();
-  } else if (strcmp(string, "Down ON") == 0) {
-    down();
+void Menu::command(byte* command) {
+  if (command[1] == 127) {
+    if (command[0] == 253) {
+      save();
+    } else if (command[0] == 252) {
+      edit();
+    } else if (command[0] == 251) {
+      up();
+    } else if (command[0] == 250) {
+      down();
+    }
   }
 }
 

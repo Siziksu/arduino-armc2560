@@ -11,7 +11,7 @@ class MidiKeyboard {
     MidiKeyboard();
     void setup(Settings *settings, Led *led);
     void loop();
-    void command(char* string);
+    void command(byte* command);
     
   private:
     Settings *_settings;
@@ -21,7 +21,7 @@ class MidiKeyboard {
     uint8_t getNoteValue(uint8_t index);
     uint8_t assignFreePin();
     boolean contains(uint8_t value);
-    void manageCommand(char* string);
+    void manageCommand(byte* command);
 };
 #endif
 

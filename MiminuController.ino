@@ -10,7 +10,7 @@ Menu menu;
 Bluetooth bluetooth;
 
 Led led(13, false);
-char* data;
+byte* data;
 
 void setup() {
   settings.setup();

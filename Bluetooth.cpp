@@ -4,14 +4,14 @@
 #define BT_RX 10
 #define BT_TX 11
 SoftwareSerial serialBluetooth(BT_RX, BT_TX);
-const byte CHAR_AMOUNT = 32;
-const char START_MARKER = '¡';
-const char END_MARKER = '!';
-boolean received = false;
-boolean receiving = false;
-char string[CHAR_AMOUNT];
+const byte PACKET_SIZE = 2;
+const byte START_PACKET_BYTE = 254;
+const byte END_PACKET_BYTE = 255;
+bool received = false;
+bool receiving = false;
+byte result[PACKET_SIZE];
 byte index = 0;
-char rc;
+byte rc;
 
 Bluetooth::Bluetooth() {}
 
@@ -23,32 +23,31 @@ void Bluetooth::loop() {
   if (serialBluetooth.available() > 0 && received == false) {
     rc = serialBluetooth.read();
     if (receiving == true) {
-      if (rc != END_MARKER) {
-        string[index] = rc;
+      if (rc != END_PACKET_BYTE) {
+        result[index] = rc;
         index++;
-        if (index >= CHAR_AMOUNT) {
-          index = CHAR_AMOUNT - 1;
+        if (index >= PACKET_SIZE) {
+          index = PACKET_SIZE - 1;
         }
       } else {
-        string[index] = '\0'; // terminate the string
         index = 0;
         received = true;
         receiving = false;
       }
-    } else if (rc == START_MARKER) {
+    } else if (rc == START_PACKET_BYTE) {
       receiving = true;
     }
   }
 }
 
-boolean Bluetooth::isReceived() {
+bool Bluetooth::isReceived() {
   return received;
 }
 
-char* Bluetooth::getData() {
+byte* Bluetooth::getData() {
   if (received == true) {
     received = false;
-    return string;
+    return result;
   } else {
     return 0;
   }

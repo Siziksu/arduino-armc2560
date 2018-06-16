@@ -15,7 +15,7 @@ class Menu {
     void up();
     void down();
     void save();
-    void command(char* string);
+    void command(byte* command);
     
   private:
     Settings *_settings;
