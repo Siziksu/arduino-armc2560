@@ -1,4 +1,4 @@
-#include "MidiKeyboard.h"
+#include "MidiController.h"
 
 #define ARRAY_LENGTH(x) (sizeof(x) / sizeof((x)[0]))
 
@@ -19,9 +19,9 @@ boolean bluetoothCommandState;
 uint8_t bluetoothCommandIndex;
 uint8_t bluetoothCommandValue;
 
-MidiKeyboard::MidiKeyboard() {}
+MidiController::MidiController() {}
 
-void MidiKeyboard::setup(Settings *settings, Led *led) {
+void MidiController::setup(Settings *settings, Led *led) {
   _settings = settings;
   _led = led;
   MIDI.begin(MIDI_CHANNEL_OMNI);
@@ -30,7 +30,7 @@ void MidiKeyboard::setup(Settings *settings, Led *led) {
   }
 }
 
-void MidiKeyboard::loop() {
+void MidiController::loop() {
   for (uint8_t i = 0; i < NUM_BUTTONS; i++) {
     buttonsState[i] = buttons[i]->state();
   }
@@ -39,11 +39,11 @@ void MidiKeyboard::loop() {
   }
 }
 
-void MidiKeyboard::command(byte* command) {
+void MidiController::command(byte* command) {
   manageCommand(command);
 }
 
-void MidiKeyboard::midiButton(uint8_t index) {
+void MidiController::midiButton(uint8_t index) {
   switch (buttonsState[index]) {
     case 1:
       if (_settings->isInModeCc()) {
@@ -64,15 +64,31 @@ void MidiKeyboard::midiButton(uint8_t index) {
   }
 }
 
-uint8_t MidiKeyboard::getControlChangeValue(uint8_t index) {
+void MidiController::manageCommand(byte* command) {
+  bluetoothCommandIndex = command[0];
+  bluetoothCommandValue = command[1];
+  if (bluetoothCommandIndex >= 0 && bluetoothCommandIndex <= 39 && bluetoothCommandValue >= 0 && bluetoothCommandValue <= 127) {
+    // Reserved for 40 Buttons
+    if (_settings->isInModeCc()) {
+      MIDI.sendControlChange(getControlChangeValue(bluetoothCommandIndex), bluetoothCommandValue, _settings->channel());
+    } else {
+      MIDI.sendNoteOn(getNoteValue(bluetoothCommandIndex), bluetoothCommandValue, _settings->channel());
+    }
+  } else if (bluetoothCommandIndex >= 100 && bluetoothCommandIndex <= 127 && bluetoothCommandValue >= 0 && bluetoothCommandValue <= 127) {
+    // Reserved for 26 potentiometers
+    MIDI.sendControlChange(getControlChangeValue(bluetoothCommandIndex), bluetoothCommandValue, _settings->channel());
+  }
+}
+
+uint8_t MidiController::getControlChangeValue(uint8_t index) {
   return index;
 }
 
-uint8_t MidiKeyboard::getNoteValue(uint8_t index) {
+uint8_t MidiController::getNoteValue(uint8_t index) {
   return index + MIDI_NOTE_START + _settings->transpose();
 }
 
-uint8_t MidiKeyboard::assignFreePin() {
+uint8_t MidiController::assignFreePin() {
   while(contains(lastAssignedPin)) {
     lastAssignedPin++;
   }
@@ -82,24 +98,12 @@ uint8_t MidiKeyboard::assignFreePin() {
   return lastAssignedPin++;
 }
 
-boolean MidiKeyboard::contains(uint8_t value) {
+boolean MidiController::contains(uint8_t value) {
   for (uint8_t i = 0; i < ARRAY_LENGTH(NO_VALID_PINS); i++) {
     if (value == NO_VALID_PINS[i]) {
       return true;
     }
   }
   return false;
-}
-
-void MidiKeyboard::manageCommand(byte* command) {
-  bluetoothCommandIndex = command[0];
-  bluetoothCommandValue = command[1];
-  if (bluetoothCommandIndex >= 0 && bluetoothCommandIndex <=127 && bluetoothCommandValue >= 0 && bluetoothCommandValue <=127) {
-    if (_settings->isInModeCc()) {
-      MIDI.sendControlChange(getControlChangeValue(bluetoothCommandIndex), bluetoothCommandValue, _settings->channel());
-    } else {
-      MIDI.sendNoteOn(getNoteValue(bluetoothCommandIndex), bluetoothCommandValue, _settings->channel());
-    }
-  }
 }
 

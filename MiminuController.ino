@@ -1,10 +1,10 @@
 #include <Commons.h>
 #include "Menu.h"
-#include "MidiKeyboard.h"
+#include "MidiController.h"
 #include "Bluetooth.h"
 
 Settings settings;
-MidiKeyboard keyboard;
+MidiController controller;
 Menu menu;
 Bluetooth bluetooth;
 
@@ -13,19 +13,19 @@ byte* data;
 
 void setup() {
   settings.setup();
-  keyboard.setup(&settings, &led);
+  controller.setup(&settings, &led);
   menu.setup(&settings, &led);
   bluetooth.setup();
 }
 
 void loop() {
   menu.loop();
-  keyboard.loop();
+  controller.loop();
   bluetooth.loop();
   if (bluetooth.isReceived()) {
     data = bluetooth.getData();
     menu.command(data);
-    keyboard.command(data);
+    controller.command(data);
   }
 }
 
