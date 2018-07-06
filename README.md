@@ -1,4 +1,4 @@
-# Miminu Controller
+# ARMC2560 Controller
 
 USB MIDI controller for `Arduino MEGA 2560`.
 

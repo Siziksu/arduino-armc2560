@@ -25,8 +25,8 @@ void Screen::showLogo() {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
-  display.setCursor(CHAR_WIDTH * 8, LINE_HEIGHT * 1);
-  display.print("MIMINU");
+  display.setCursor(CHAR_WIDTH * 7, LINE_HEIGHT * 1);
+  display.print("ARMC2560");
   display.setCursor(CHAR_WIDTH * 6, LINE_HEIGHT * 2);
   display.print("CONTROLLER");
   display.setCursor(CHAR_WIDTH * 9 + CHAR_HALF_WIDTH, LINE_HEIGHT * 3);
